@@ -1,0 +1,30 @@
+server:
+  port: 8072
+ 
+eureka:
+  instance:
+    preferIpAddress: true
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://eurekaserver:8070/eureka/
+
+spring:
+  cloud:
+    loadbalancer.ribbon.enabled: false
+    gateway:
+        routes:
+        - id: house-service
+          uri: lb://house-service
+          predicates:
+          - Path=/house/**
+          filters:
+          - RewritePath=/house/(?<path>.*), /$\{path}
+#          - RemoveRequestHeader= Cookie,Set-Cookie
+            
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
