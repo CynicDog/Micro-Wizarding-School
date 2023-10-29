@@ -1,15 +1,20 @@
-version: '3.7'
+version: '2.1'
 services:
   database:
     image: mysql:latest
     ports:
       - "3306:3306"
     environment:
+      MYSAL_USER: "cynicdog"
       MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
       MYSQL_DB: "mws_dev"
-#    volumes:
-#      - ./init.sql:/docker-entrypoint-initdb.d/1-init.sql
-#      - ./data.sql:/docker-entrypoint-initdb.d/2-data.sql
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/1-init.sql
+      - ./data.sql:/docker-entrypoint-initdb.d/2-data.sql
+    healthcheck:
+      test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
+      timeout: 10s
+      retries: 10
     networks:
       backend:
         aliases:
@@ -23,6 +28,62 @@ services:
       backend:
         aliases:
           - "configserver"
+
+  eurekaserver:
+    image: mws/eurekaserver:0.0.1-SNAPSHOT
+    ports:
+      - "8070:8070"
+    depends_on:
+      database:
+        condition: service_healthy
+      configserver:
+        condition: service_started
+    networks:
+      backend:
+        aliases:
+          - "eurekaserver"
+
+  gatewayserver:
+    image: mws/gatewayserver:0.0.1-SNAPSHOT
+    ports:
+      - "8072:8072"
+    environment:
+      PROFILE: "default"
+      SERVER_PORT: "8072"
+      CONFIGSERVER_URI: "http://configserver:8071"
+      EUREKASERVER_URI: "http://eurekaserver:8070/eureka/"
+      EUREKASERVER_PORT: "8070"
+      CONFIGSERVER_PORT: "8071"
+    depends_on:
+      database:
+        condition: service_healthy
+      configserver:
+        condition: service_started
+      eurekaserver:
+        condition: service_started
+    networks:
+      backend:
+        aliases:
+          - "gateway"
+
+  houseservice:
+    image: mws/house-service:0.0.1-SNAPSHOT
+    environment:
+      PROFILE: "dev"
+      CONFIGSERVER_URI: "http://configserver:8071"
+      CONFIGSERVER_PORT: "8071"
+      DATABASESERVER_PORT: "3306"
+    depends_on:
+      database:
+        condition: service_healthy
+      configserver:
+        condition: service_started
+#      kafkaserver:
+#        condition: service_started
+    ports:
+      - "8081:8081"
+    networks:
+      - backend
 
 networks:
   backend:
