@@ -22,6 +22,9 @@ Welcome to Micro Wizarding School, a Harry Potter-themed microservice architectu
 - **House Quota and Material Management Service:**
     - Manages the house quota, ensuring a balanced distribution of students across houses.
     - Tracks the stock of materials and resources in each house's dormitory (e.g., food, textbooks, common room items).
+ 
+- **Invitation letter**
+    - Generates personalized invitation letters for newly accepted students.
 
 ### 3. `academic-service`: Wizarding Subjects and Homework (New Domain)
 
