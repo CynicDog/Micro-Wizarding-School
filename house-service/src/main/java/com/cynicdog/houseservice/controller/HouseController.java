@@ -21,6 +21,7 @@ public class HouseController {
         this.houseService = houseService;
     }
 
+    // http GET http://localhost:8072/house/v1/house/Gryffindor
     @RequestMapping(value = "/{houseTitle}", method = RequestMethod.GET)
     public ResponseEntity house(@PathVariable String houseTitle) {
 
