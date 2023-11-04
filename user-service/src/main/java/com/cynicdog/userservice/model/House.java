@@ -1,8 +1,8 @@
 package com.cynicdog.userservice.model;
 
-import lombok.Setter;
+import lombok.Getter;
 
-@Setter
+@Getter
 public class House {
 
     private Long id;
