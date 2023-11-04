@@ -1,16 +1,15 @@
 version: '2.1'
 services:
-  database:
+  house_database:
     image: mysql:latest
     ports:
       - "3306:3306"
     environment:
       MYSAL_USER: "root"
       MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
-      MYSQL_DB: "mws_dev"
+      MYSQL_DB: "mws_house"
     volumes:
-      - ./init.sql:/docker-entrypoint-initdb.d/1-init.sql
-      - ./data.sql:/docker-entrypoint-initdb.d/2-data.sql
+      - ./house_init.sql:/docker-entrypoint-initdb.d/1-house_init.sql
     healthcheck:
       test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
       timeout: 10s
@@ -18,7 +17,26 @@ services:
     networks:
       backend:
         aliases:
-          - "database"
+          - "house_database"
+
+  user_database:
+    image: mysql:latest
+    ports:
+      - "3307:3306"
+    environment:
+      MYSAL_USER: "root"
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_DB: "mws_user"
+    volumes:
+      - ./user_init.sql:/docker-entrypoint-initdb.d/1-user_init.sql
+    healthcheck:
+      test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
+      timeout: 10s
+      retries: 10
+    networks:
+      backend:
+        aliases:
+          - "user_database"
 
   configserver:
     image: mws/configserver:0.0.1-SNAPSHOT
@@ -34,7 +52,9 @@ services:
     ports:
       - "8070:8070"
     depends_on:
-      database:
+      house_database:
+        condition: service_healthy
+      user_database:
         condition: service_healthy
       configserver:
         condition: service_started
@@ -55,8 +75,10 @@ services:
       EUREKASERVER_PORT: "8070"
       CONFIGSERVER_PORT: "8071"
     depends_on:
-      database:
+      house_database:
         condition: service_healthy
+      user_database:
+          condition: service_healthy
       configserver:
         condition: service_started
       eurekaserver:
@@ -74,7 +96,7 @@ services:
       CONFIGSERVER_PORT: "8071"
       DATABASESERVER_PORT: "3306"
     depends_on:
-      database:
+      house_database:
         condition: service_healthy
       configserver:
         condition: service_started
@@ -93,7 +115,7 @@ services:
       CONFIGSERVER_PORT: "8071"
       DATABASESERVER_PORT: "3306"
     depends_on:
-      database:
+      user_database:
         condition: service_healthy
       configserver:
         condition: service_started
