@@ -5,7 +5,7 @@ services:
     ports:
       - "3306:3306"
     environment:
-      MYSAL_USER: "cynicdog"
+      MYSAL_USER: "root"
       MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
       MYSQL_DB: "mws_dev"
     volumes:
