@@ -56,7 +56,7 @@ To experience the magic of Hogwarts School of Witchcraft and Wizardry Applicatio
 
 1. Clone this repository to your local machine.
 
-2. Set up each microservice using `mvn clean package` && `mvn package dockerfile:build` in each directory of service. 
+2. Set up each microservice using `mvn clean package` && `mvn package dockerfile:build` in the parent (root) directory 
 
 3. Run each microservice using `docker-compose up` command line in the directory of `docker`.
 
