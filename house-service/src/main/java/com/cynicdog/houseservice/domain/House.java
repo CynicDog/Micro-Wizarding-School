@@ -10,11 +10,38 @@ public class House {
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    private HOUSE_TITLE houseTitle;
+    private TITLE title;
 
     private int quota = 250;
 
-    public enum HOUSE_TITLE {
+    public enum TITLE {
         Gryffindor, Hufflepuff, Ravenclaw, Slytherin
+    }
+
+    public House() {
+    }
+
+    public House(String title) {
+        this.title = TITLE.valueOf(title);
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public TITLE getTitle() {
+        return title;
+    }
+
+    public void setTitle(TITLE title) {
+        this.title = title;
+    }
+
+    public int getQuota() {
+        return quota;
+    }
+
+    public void setQuota(int quota) {
+        this.quota = quota;
     }
 }
