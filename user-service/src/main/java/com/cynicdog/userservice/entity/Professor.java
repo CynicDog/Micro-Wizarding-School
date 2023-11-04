@@ -21,8 +21,8 @@ public class Professor extends User {
     public Professor() {
     }
 
-    public Professor(String firstName, String middleName, String lastName, Date joinedDate, String role, String subject, String position) {
-        super(firstName, middleName, lastName, joinedDate, role);
+    public Professor(String firstName, String middleName, String lastName, String wand, Date joinedDate, String role, String subject, String position) {
+        super(firstName, middleName, lastName, wand, joinedDate, role);
         this.subject = subject;
         this.position = position;
     }

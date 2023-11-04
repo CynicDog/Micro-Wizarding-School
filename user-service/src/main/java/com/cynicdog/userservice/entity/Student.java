@@ -2,6 +2,8 @@ package com.cynicdog.userservice.entity;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,23 +16,17 @@ import java.util.Date;
 public class Student extends User {
 
     private String houseTitle;
-    private Integer academicYear;
-
-    @Column(unique = true)
-    private String wand;
 
     @OneToOne
+    @Cascade(CascadeType.ALL)
     private Pet pet;
 
     public Student() {
     }
 
-    public Student(String firstName, String middleName, String lastName, Date joinedDate, String role, String houseTitle, Integer academicYear, String wand, Pet pet) {
-        super(firstName, middleName, lastName, joinedDate, role);
+    public Student(String firstName, String middleName, String lastName, String wand, Date joinedDate, String role, String houseTitle, Pet pet) {
+        super(firstName, middleName, lastName, wand, joinedDate, role);
         this.houseTitle = houseTitle;
-        this.academicYear = academicYear;
-        this.wand = wand;
         this.pet = pet;
     }
-
 }

@@ -13,15 +13,13 @@ public class Pet {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private Integer age;
     private String type;
 
     public Pet() {
     }
 
-    public Pet(String name, Integer age, String type) {
+    public Pet(String name, String type) {
         this.name = name;
-        this.age = age;
         this.type = type;
     }
 }
