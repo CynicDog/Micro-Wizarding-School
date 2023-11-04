@@ -85,6 +85,25 @@ services:
     networks:
       - backend
 
+  userservice:
+    image: mws/user-service:0.0.1-SNAPSHOT
+    environment:
+      PROFILE: "dev"
+      CONFIGSERVER_URI: "http://configserver:8071"
+      CONFIGSERVER_PORT: "8071"
+      DATABASESERVER_PORT: "3306"
+    depends_on:
+      database:
+        condition: service_healthy
+      configserver:
+        condition: service_started
+    #      kafkaserver:
+    #        condition: service_started
+    ports:
+      - "8082:8082"
+    networks:
+      - backend
+
 networks:
   backend:
     driver: bridge

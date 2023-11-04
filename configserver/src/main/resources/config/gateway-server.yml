@@ -1,6 +1,6 @@
 server:
   port: 8072
- 
+
 eureka:
   instance:
     preferIpAddress: true
@@ -14,15 +14,21 @@ spring:
   cloud:
     loadbalancer.ribbon.enabled: false
     gateway:
-        routes:
+      routes:
         - id: house-service
           uri: lb://house-service
           predicates:
-          - Path=/house/**
+            - Path=/house/**
           filters:
-          - RewritePath=/house/(?<path>.*), /$\{path}
-#          - RemoveRequestHeader= Cookie,Set-Cookie
-            
+            - RewritePath=/house/(?<path>.*), /$\{path}
+        #          - RemoveRequestHeader= Cookie,Set-Cookie
+        - id: user-service
+          uri: lb://user-service
+          predicates:
+            - Path=/user/**
+          filters:
+            - RewritePath=/user/(?<path>.*), /$\{path}
+
 management:
   endpoints:
     web:
