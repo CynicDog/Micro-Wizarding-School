@@ -1,10 +1,14 @@
 package com.cynicdog.userservice.entity;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.util.Date;
 
+@Getter
+@Setter
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 public class User {
@@ -18,12 +22,7 @@ public class User {
     @CreationTimestamp
     private Date joinedDate;
 
-    @Enumerated(EnumType.STRING)
-    private ROLE role;
-
-    public enum ROLE {
-        STUDENT, PROFESSOR
-    }
+    private String role;
 
     public User() {
     }
@@ -33,6 +32,6 @@ public class User {
         this.middleName = middleName;
         this.lastName = lastName;
         this.joinedDate = joinedDate;
-        this.role = ROLE.valueOf(role);
+        this.role = role;
     }
 }

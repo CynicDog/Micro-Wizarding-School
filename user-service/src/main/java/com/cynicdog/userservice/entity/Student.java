@@ -1,10 +1,15 @@
 package com.cynicdog.userservice.entity;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToOne;
 import java.util.Date;
 
+@Getter
+@Setter
 @Entity
 public class Student extends User {
 
@@ -27,4 +32,5 @@ public class Student extends User {
         this.wand = wand;
         this.pet = pet;
     }
+
 }

@@ -1,7 +1,12 @@
 package com.cynicdog.userservice.entity;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 
+@Getter
+@Setter
 @Entity
 public class Pet {
 
@@ -9,12 +14,7 @@ public class Pet {
     private Long id;
     private String name;
     private Integer age;
-    @Enumerated(EnumType.STRING)
-    private TYPE type;
-
-    public enum TYPE {
-        CAT, OWL, TOAD
-    }
+    private String type;
 
     public Pet() {
     }
@@ -22,6 +22,6 @@ public class Pet {
     public Pet(String name, Integer age, String type) {
         this.name = name;
         this.age = age;
-        this.type = TYPE.valueOf(type);
+        this.type = type;
     }
 }
