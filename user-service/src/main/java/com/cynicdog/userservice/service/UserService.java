@@ -7,6 +7,7 @@ import com.cynicdog.userservice.repository.CourseRepository;
 import com.cynicdog.userservice.repository.PetRepository;
 import com.cynicdog.userservice.repository.UserRepository;
 
+import com.cynicdog.userservice.service.client.HouseClient;
 import org.jboss.logging.Logger;
 import org.springframework.stereotype.Service;
 
@@ -18,11 +19,13 @@ public class UserService {
     private final UserRepository userRepository;
     private final PetRepository petRepository;
     private final CourseRepository courseRepository;
+    private final HouseClient houseClient;
 
-    public UserService(UserRepository userRepository, PetRepository petRepository, CourseRepository courseRepository) {
+    public UserService(UserRepository userRepository, PetRepository petRepository, CourseRepository courseRepository, HouseClient houseClient) {
         this.userRepository = userRepository;
         this.petRepository = petRepository;
         this.courseRepository = courseRepository;
+        this.houseClient = houseClient;
     }
 
     public void insertStudent(Student student) {
@@ -44,5 +47,13 @@ public class UserService {
         logger.info(fullName + ", " + middleName + ", " + lastName);
 
         return userRepository.findByFirstNameAndMiddleNameAndLastName(firstName, middleName, lastName).orElse(null);
+    }
+
+    public boolean isHouseAvailable(String houseTitle) {
+
+        Integer quota = houseClient.getHouseByTitle(houseTitle).getQuota();
+        long currentNumberOfStudents = userRepository.countByHouseTitle(houseTitle);
+
+        return quota > currentNumberOfStudents;
     }
 }

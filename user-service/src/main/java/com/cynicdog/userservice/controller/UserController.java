@@ -20,13 +20,26 @@ public class UserController {
 
     // http GET http://localhost:8072/user/v1/user/HarryJamesPotter
     @RequestMapping(value = "/{fullName}", method = RequestMethod.GET)
-    public ResponseEntity userByFullName(@PathVariable String fullName) {
+    public ResponseEntity userByFullName(@PathVariable("fullName") String fullName) {
 
         logger.info("[ UserController - fetching an instance of `User` with the full name of " + fullName + " ]");
         User found = userService.getUserByFullName(fullName);
 
         if (found != null) {
             return ResponseEntity.ok().body(found);
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    // http GET 'http://localhost:8072/user/v1/user?houseTitle=Gryffindor'
+    @RequestMapping(method = RequestMethod.GET)
+    public ResponseEntity houseAvailability(@RequestParam("houseTitle") String houseTitle) {
+
+        logger.info("[ UserController - querying if House with the tittle of " + houseTitle + " ]");
+
+        if (userService.isHouseAvailable(houseTitle)) {
+            return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.badRequest().build();
         }

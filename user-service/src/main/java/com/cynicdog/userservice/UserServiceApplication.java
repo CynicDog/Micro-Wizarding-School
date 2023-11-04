@@ -2,12 +2,17 @@ package com.cynicdog.userservice;
 
 import com.cynicdog.userservice.entity.Pet;
 import com.cynicdog.userservice.entity.Student;
+import com.cynicdog.userservice.repository.UserRepository;
 import com.cynicdog.userservice.service.UserService;
 import org.jboss.logging.Logger;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.Date;
 
@@ -16,16 +21,16 @@ import java.util.Date;
 public class UserServiceApplication implements CommandLineRunner {
 
     private static final Logger logger = Logger.getLogger(UserServiceApplication.class);
-    private final UserService userService;
+    private final UserRepository userRepository;
 
-    public UserServiceApplication(UserService userService) {
-        this.userService = userService;
+    public UserServiceApplication(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
-    public static void main(String[] args) {
-        SpringApplication.run(UserServiceApplication.class, args);
+    @LoadBalanced @Bean
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
     }
-
 
     @Override
     public void run(String... args) throws Exception {
@@ -40,6 +45,10 @@ public class UserServiceApplication implements CommandLineRunner {
                 "Gryffindor",
                 new Pet("Hedwig", "Owl"));
 
-        userService.insertStudent(harry);
+        userRepository.save(harry);
+    }
+
+    public static void main(String[] args) {
+        SpringApplication.run(UserServiceApplication.class, args);
     }
 }
