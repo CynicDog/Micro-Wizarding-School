@@ -8,32 +8,25 @@ public class House {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Enumerated(EnumType.STRING)
-    private TITLE title;
-
+    private String title;
     private int quota = 250;
-
-    public enum TITLE {
-        Gryffindor, Hufflepuff, Ravenclaw, Slytherin
-    }
 
     public House() {
     }
 
     public House(String title) {
-        this.title = TITLE.valueOf(title);
+        this.title = title;
     }
 
     public Long getId() {
         return id;
     }
 
-    public TITLE getTitle() {
+    public String getTitle() {
         return title;
     }
 
-    public void setTitle(TITLE title) {
+    public void setTitle(String title) {
         this.title = title;
     }
 

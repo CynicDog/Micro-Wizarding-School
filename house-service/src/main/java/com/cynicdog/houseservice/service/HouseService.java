@@ -16,8 +16,8 @@ public class HouseService {
         this.houseRepository = houseRepository;
     }
 
-    public House getHouseByTitle(String houseTitle) {
+    public House getHouseByTitle(String title) {
 
-        return houseRepository.findByTitle(House.TITLE.valueOf(houseTitle)).orElse(null);
+        return houseRepository.findByTitle(title).orElse(null);
     }
 }
