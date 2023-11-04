@@ -25,7 +25,7 @@ public class HouseServiceApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        logger.info("[ HouseRepository - initial data settings.. ]");
+        logger.info("[ HouseRepository - initial data insertion.. ]");
 
         // Gryffindor, Hufflepuff, Ravenclaw, Slytherin
         houseRepository.save(new House("Gryffindor"));
